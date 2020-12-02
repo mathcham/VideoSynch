@@ -17,8 +17,6 @@ extern "C"
 	#include "libavutil/avutil.h"
 	#include "libavutil/display.h"
 	#include "libavutil/mathematics.h"
-	
-	//#include "libavutil/stereo3d.h"
 }
 
 using namespace std;
@@ -216,7 +214,7 @@ class VideoPair {
 			int h = height * (1.0 - abs(cfy) / 100.0);
 
 			char *ffmpeg_command = new char[350 + strlen(L.path) + strlen(R.path) + strlen(output)];
-			sprintf(ffmpeg_command, "ffmpeg -y -i %s -i %s -filter_complex \"[0:v]trim=start=%lldus,scale=%i:%i,fps=%f,setpts=PTS-STARTPTS,crop=%i:%i:%i:%i[l]; [1:v]trim=start=%lldus,scale=%i:%i,fps=%f,setpts=PTS-STARTPTS,crop=%i:%i:%i:%i[r]; [l][r] hstack=inputs=2, trim=duration=%lldus\" -an %s", L.path, R.path, (long long)L.trim_time, (int)width, (int)height, framerate, w, h, x1, y1, (long long)R.trim_time, (int)width, (int)height, framerate, w, h, x2, y2, (long long)(duration - 40000), output);
+			sprintf(ffmpeg_command, "ffmpeg -y -i \"%s\" -i \"%s\" -filter_complex \"[0:v]trim=start=%lldus,scale=%i:%i,fps=%f,setpts=PTS-STARTPTS,crop=%i:%i:%i:%i[l]; [1:v]trim=start=%lldus,scale=%i:%i,fps=%f,setpts=PTS-STARTPTS,crop=%i:%i:%i:%i[r]; [l][r] hstack=inputs=2, trim=duration=%lldus\" -an \"%s\"", L.path, R.path, (long long)L.trim_time, (int)width, (int)height, framerate, w, h, x1, y1, (long long)R.trim_time, (int)width, (int)height, framerate, w, h, x2, y2, (long long)(duration - 40000), output);
 			int r = system(ffmpeg_command);
 			delete[] ffmpeg_command;
 			return r;
@@ -310,13 +308,13 @@ int main(int argc, const char * argv[]) {
 
 	// tests path : G:\desktoop\lightX
 	//l_path = "G://desktoop//lightx//testsss//iphoneG.MOV";
-	l_path = "G://desktoop//lightx//GA.MOV";
+	l_path = "D://OneDrive - Innovations LightX inc//a_classe//Videos//GAUCHE.MOV";
 	//r_path = "G://desktoop//lightx//testsss//iphoneD.MOV";
-	r_path = "G://desktoop//lightx//DR.MOV";
-	o_path = "\"G://OneDrive - Innovations LightX inc//OEIL_2K_30fps_FIXED.mp4\"";
+	r_path = "D://OneDrive - Innovations LightX inc//a_classe//Videos//DROITE.MOV";
+	o_path = "D://LightX//TEST_RESULTS//test_2K_30fps_2x1.mp4";
 //G:\OneDrive - Innovations LightX inc
 	VideoPair VP(l_path, r_path);
-	VP.trim(o_path, 2.2, 0.6, 30.0, 2);
+	VP.trim(o_path, 1.4, 1.0, 30.0, 2);
 
 	cout << "Done!\n";
 	return 0;
